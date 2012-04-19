@@ -77,8 +77,8 @@ function sudokuIsSolvable(sudoku) {
 				}
 
 				// Remove numbers found in nearest grid of nine
-				col = (i < 3) ? 0 : (i < 6) ?  3 : 6;
-				row = (j < 3) ? 0 : (j < 6) ?  3 : 6;
+				col = (j < 3) ? 0 : (j < 6) ?  3 : 6;
+				row = (i < 3) ? 0 : (i < 6) ?  3 : 6;
 
 				for (l = row; l < row + 3; l++) {
 					for (m = col; m < row + 3; m++) {
@@ -91,7 +91,8 @@ function sudokuIsSolvable(sudoku) {
 				if (nums.length === 0) {
 					return false;
 				} else if (nums.length === 1) {
-					sudoku.array[i][j] = nums[0];
+					// Uncomment next line to solve array
+					//sudoku.array[i][j] = nums[0];
 					solved++;
 				} else {
 					unsolved++;
@@ -105,29 +106,29 @@ function sudokuIsSolvable(sudoku) {
 	} else if (solved === 0) {
 		return false;
 	} else {
-		console.log(unsolved, solved);
 		return sudokuIsSolvable(sudoku);
 	}
 }
 
 function getSudoku() {
 	var sudoku = getFullSudoku(), tmp_num, row, col;
-
-	while (sudokuIsSolvable(sudoku)) {
-		row = Math.floor(Math.random() * 9);
-		col = Math.floor(Math.random() * 9);
-
-		// Remove random element
-		tmp_num = sudoku.array[row][col];
-		sudoku.array[row][col] = null;
-		console.log(sudokuIsSolvable(sudoku));
-	}
 	
-	// Restore random element that didn't work
-	// sudoku.array[row][col] = tmp_num;
+	for (var i = 0; i < 5; i++) {
+		while (sudokuIsSolvable(sudoku)) {
+			row = Math.floor(Math.random() * 9);
+			col = Math.floor(Math.random() * 9);
+	
+			// Remove random element
+			tmp_num = sudoku.array[row][col];
+			sudoku.array[row][col] = null;
+		}
+		
+		// Restore random element that didn't work
+		sudoku.array[row][col] = tmp_num;	
+	}
 	
 	return sudoku;
 }
 
 var a = getSudoku();
-a
+a.toString();
