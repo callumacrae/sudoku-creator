@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf8">
+	<title>Sudoku</title>
+</head>
+<body>
+	<pre></pre>
+	<button>Update</button>
+	<script src="matrixjs/lib/matrix.js"></script>
+	<script src="sudoku.js"></script>
+	<script>
+		document.getElementsByTagName('pre')[0].innerHTML = lazy();
+		document.getElementsByTagName('button')[0].addEventListener('click', function () {
+			document.getElementsByTagName('pre')[0].innerHTML = lazy();
+		});
+	</script>
+</body>
