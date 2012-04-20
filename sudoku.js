@@ -1,8 +1,79 @@
 /**
- * Generate and return a full, completed sudoku.
+ * Dumb function to say whether sudoku is solvable.
+ *
+ * It will return false for some possible sudokus, but never true
+ * for impossible sudokus.
+ *
+ * @param Matrix sudoku Sudoku in the form of a Matrix
  */
-function getFullSudoku() {
-	var sudoku;
+function sudokuIsSolvable(sudoku) {
+	var i, j, k, l, m, nums, solved, unsolved, col, row;
+
+	while (true) {	
+		solved = unsolved = 0;
+		
+		for (i = 0; i < 9; i++) {
+			for (j = 0; j < 9; j++) {
+			
+				// If not already solved, attempt to solve it
+				if (sudoku.array[i][j] === null) {
+					nums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+					
+					// Remove numbers found in row and columns
+					for (k = 0; k < 9; k++) {
+						if (nums.indexOf(sudoku.array[i][k]) !== -1) {
+							nums.splice(nums.indexOf(sudoku.array[i][k]), 1);
+						}
+						if (nums.indexOf(sudoku.array[k][j]) !== -1) {
+							nums.splice(nums.indexOf(sudoku.array[k][j]), 1);
+						}
+					}
+	
+					// Remove numbers found in nearest grid of nine
+					col = (j < 3) ? 0 : (j < 6) ?  3 : 6;
+					row = (i < 3) ? 0 : (i < 6) ?  3 : 6;
+	
+					for (l = row; l < row + 3; l++) {
+						for (m = col; m < row + 3; m++) {
+							if (nums.indexOf(sudoku.array[m][l]) !== -1) {
+								nums.splice(nums.indexOf(sudoku.array[m][l]), 1);
+							}
+						}
+					}
+	
+					if (nums.length === 0) {
+						return false;
+					} else if (nums.length === 1) {
+						sudoku.array[i][j] = nums[0];
+						solved++;
+					} else if (nums.length === 2 && randomise) {
+						sudoku.array[i][j] = nums[Math.round(Math.random())];
+						solved++
+					} else {
+						unsolved++;
+					}
+				}
+			}
+		}
+		
+		if (unsolved === 0) {
+			return true;
+		} else if (solved === 0) {
+			return false;
+		}
+	}
+}
+
+/**
+ * Generate and return a solvable sudoku.
+ *
+ * @param int blank Number of blank squares to have.
+ */
+function getSudoku(blank) {
+	var sudoku,
+		real_blank = 0,
+		i = 0,
+		tmp_num, row, col;
 	
 	// Loop here, as it only returns a valid sudoku occasionally
 	while (!(sudoku = (function () {
@@ -52,99 +123,25 @@ function getFullSudoku() {
 				sudoku.array[i][j] = nums[Math.floor(Math.random() * nums.length)];
 			}
 		}
-		return sudoku;
+		return sudoku; // This is a full, solved sudoku
 	})()));
-	return sudoku;
-}
-
-/**
- * Dumb function to say whether sudoku is solvable.
- *
- * It will sometimes return false for possible sudokus, but never true
- * for impossible sudokus.
- */
-function sudokuIsSolvable(sudoku) {
-	var i, j, k, l, m, nums, solved, unsolved, col, row;
-	
-	while (true) {	
-		solved = unsolved = 0;
-		
-		for (i = 0; i < 9; i++) {
-			for (j = 0; j < 9; j++) {
-			
-				// If not already solved, attempt to solve it
-				if (sudoku.array[i][j] === null) {
-					nums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-					
-					// Remove numbers found in row and columns
-					for (k = 0; k < 9; k++) {
-						if (nums.indexOf(sudoku.array[i][k]) !== -1) {
-							nums.splice(nums.indexOf(sudoku.array[i][k]), 1);
-						}
-						if (nums.indexOf(sudoku.array[k][j]) !== -1) {
-							nums.splice(nums.indexOf(sudoku.array[k][j]), 1);
-						}
-					}
-	
-					// Remove numbers found in nearest grid of nine
-					col = (j < 3) ? 0 : (j < 6) ?  3 : 6;
-					row = (i < 3) ? 0 : (i < 6) ?  3 : 6;
-	
-					for (l = row; l < row + 3; l++) {
-						for (m = col; m < row + 3; m++) {
-							if (nums.indexOf(sudoku.array[m][l]) !== -1) {
-								nums.splice(nums.indexOf(sudoku.array[m][l]), 1);
-							}
-						}
-					}
-	
-					if (nums.length === 0) {
-						return false;
-					} else if (nums.length === 1) {
-						// Uncomment next line to solve array
-						//sudoku.array[i][j] = nums[0];
-						solved++;
-					} else {
-						unsolved++;
-					}
-				}
-			}
-		}
-		
-		if (unsolved === 0) {
-			return true;
-		} else if (solved === 0) {
-			return false;
-		}
-	}
-}
-
-/**
- * Generate and return a solvable sudoku.
- *
- * @param int blank Number of blank squares to have.
- */
-function getSudoku(blank) {
-	var sudoku = getFullSudoku(),
-		real_blank = 0;
-		tmp_num, row, col;
 	
 	if (typeof blank !== 'number') {
-		blank = 20;
+		blank = 60;
 	}
 	
-	while (real_blank < blank) {
+	// Remove numbers until the specified amount is removed (default 50)
+	while (real_blank < blank && i++ < 5000) {
 		row = Math.floor(Math.random() * 9);
 		col = Math.floor(Math.random() * 9);
 		
-		// Remove random element
 		tmp_num = sudoku.array[row][col];
 		sudoku.array[row][col] = null;
 		
-		if (sudokuIsSolvable(sudoku)) {
+		// If it doesn't work, put it back
+		if (sudokuIsSolvable(sudoku.clone())) {
 			real_blank++;
 		} else {
-			console.log(sudoku.toString());
 			sudoku.array[row][col] = tmp_num;
 		}
 	}
@@ -152,5 +149,24 @@ function getSudoku(blank) {
 	return sudoku;
 }
 
-var a = getSudoku(1);
-a.toString();
+/**
+ * Return correctly formatted sudoku.
+ *
+ * This destroys the sudoku.
+ */
+function formatSudoku(sudoku) {
+	var e = '', i, j;
+	
+	for (i = 0; i < 9; i++) {
+		for (j = 0; j < 9; j++) {
+			if (sudoku.array[i][j] === null) {
+				sudoku.array[i][j] = '-';
+			}
+		}
+		e += sudoku.array[i].join(' ') + '\n';
+	}
+	
+	return e.slice(0, -1); // Remove trailing new line
+}
+
+function lazy(num) { return formatSudoku(getSudoku(num || 60)); }
