@@ -1,0 +1,3 @@
+[submodule "matrixjs"]
+	path = matrixjs
+	url = git@github.com:callumacrae/MatrixJS.git
