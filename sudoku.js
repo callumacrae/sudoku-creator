@@ -127,7 +127,7 @@ function getSudoku(blank) {
 	})()));
 	
 	if (typeof blank !== 'number') {
-		blank = 60;
+		blank = 70;
 	}
 	
 	// Remove numbers until the specified amount is removed (default 50)
