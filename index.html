@@ -3,16 +3,41 @@
 <head>
 	<meta charset="utf8">
 	<title>Sudoku</title>
+	<style>
+		body {
+			text-align: center;
+		}
+		
+		a {
+			display: block;
+			padding-top: 50px;
+		}
+	</style>
 </head>
 <body>
-	<pre></pre>
-	<button>Update</button>
+	<pre></pre><button></button>
+	<a href="http://github.com/callumacrae/sudoku-creator">View code on GitHub</a>
+
 	<script src="matrixjs/lib/matrix.js"></script>
 	<script src="sudoku.js"></script>
 	<script>
-		document.getElementsByTagName('pre')[0].innerHTML = lazy();
-		document.getElementsByTagName('button')[0].addEventListener('click', function () {
-			document.getElementsByTagName('pre')[0].innerHTML = lazy();
+		var button = document.getElementsByTagName('button')[0];
+		var pre = document.getElementsByTagName('pre')[0];
+		
+		function refresh() {
+			button.innerHTML = 'Generating';
+
+			// We need a delay here to give the text time to change before
+			// getSudoku blocks the browser.
+			setTimeout(function () {
+				pre.innerHTML = formatSudoku(getSudoku());
+				button.innerHTML = 'Generate';
+			}, 1);
+		}
+		refresh();
+
+		button.addEventListener('click', function () {
+			refresh();
 		});
 	</script>
 </body>

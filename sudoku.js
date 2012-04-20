@@ -168,5 +168,3 @@ function formatSudoku(sudoku) {
 	
 	return e.slice(0, -1); // Remove trailing new line
 }
-
-function lazy(num) { return formatSudoku(getSudoku(num || 60)); }
