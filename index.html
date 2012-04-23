@@ -34,10 +34,7 @@
 				button.innerHTML = 'Generate';
 			}, 1);
 		}
+		button.addEventListener('click', refresh);
 		refresh();
-
-		button.addEventListener('click', function () {
-			refresh();
-		});
 	</script>
 </body>
