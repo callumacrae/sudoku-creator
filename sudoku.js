@@ -130,7 +130,7 @@ function getSudoku(blank) {
 		blank = 70;
 	}
 	
-	// Remove numbers until the specified amount is removed (default 50)
+	// Remove numbers until the specified amount is removed (default 70)
 	while (real_blank < blank && i++ < 5000) {
 		row = Math.floor(Math.random() * 9);
 		col = Math.floor(Math.random() * 9);
