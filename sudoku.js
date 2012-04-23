@@ -8,6 +8,8 @@
  */
 function sudokuIsSolvable(sudoku) {
 	var i, j, k, l, m, nums, solved, unsolved, col, row;
+	
+	sudoku = sudoku.clone();
 
 	while (true) {	
 		solved = unsolved = 0;
@@ -46,9 +48,6 @@ function sudokuIsSolvable(sudoku) {
 					} else if (nums.length === 1) {
 						sudoku.array[i][j] = nums[0];
 						solved++;
-					} else if (nums.length === 2 && randomise) {
-						sudoku.array[i][j] = nums[Math.round(Math.random())];
-						solved++
 					} else {
 						unsolved++;
 					}
@@ -139,7 +138,7 @@ function getSudoku(blank) {
 		sudoku.array[row][col] = null;
 		
 		// If it doesn't work, put it back
-		if (sudokuIsSolvable(sudoku.clone())) {
+		if (sudokuIsSolvable(sudoku)) {
 			real_blank++;
 		} else {
 			sudoku.array[row][col] = tmp_num;
@@ -151,11 +150,11 @@ function getSudoku(blank) {
 
 /**
  * Return correctly formatted sudoku.
- *
- * This destroys the sudoku.
  */
 function formatSudoku(sudoku) {
-	var e = '', i, j;
+	var e = [], i, j;
+	
+	sudoku = sudoku.clone();
 	
 	for (i = 0; i < 9; i++) {
 		for (j = 0; j < 9; j++) {
@@ -163,8 +162,8 @@ function formatSudoku(sudoku) {
 				sudoku.array[i][j] = '-';
 			}
 		}
-		e += sudoku.array[i].join(' ') + '\n';
+		e.push(sudoku.array[i].join(' '));
 	}
 	
-	return e.slice(0, -1); // Remove trailing new line
+	return e.join('\n');
 }
