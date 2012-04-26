@@ -32,9 +32,9 @@
 			setTimeout(function () {
 				pre.innerHTML = formatSudoku(getSudoku());
 				button.innerHTML = 'Generate';
-			}, 1);
+			}, 10);
 		}
 		button.addEventListener('click', refresh);
-		$(refresh);
+		refresh()
 	</script>
 </body>
