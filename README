@@ -1,1 +1,3 @@
 An algorithm to create a solvable Sudoku puzzle written in JavaScript.
+
+To easily view the sudoku, open index.html in a browser. It may take a while.
